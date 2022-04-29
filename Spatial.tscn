@@ -1,0 +1,84 @@
+[gd_scene load_steps=10 format=2]
+
+[ext_resource path="res://TimeManager.gd" type="Script" id=1]
+[ext_resource path="res://NPC.gd" type="Script" id=2]
+[ext_resource path="res://DateTimeInterfaceManager.gd" type="Script" id=3]
+[ext_resource path="res://DayNight.gd" type="Script" id=4]
+[ext_resource path="res://camera.gd" type="Script" id=5]
+
+[sub_resource type="CubeMesh" id=1]
+
+[sub_resource type="ProceduralSky" id=5]
+sky_top_color = Color( 0.670588, 0.670588, 0.670588, 1 )
+sun_angle_max = 15.55
+
+[sub_resource type="Environment" id=3]
+background_mode = 2
+background_sky = SubResource( 5 )
+
+[sub_resource type="PlaneMesh" id=4]
+
+[node name="Spatial" type="Spatial" groups=["TimeManager"]]
+script = ExtResource( 1 )
+
+[node name="MeshInstance" type="MeshInstance" parent="."]
+mesh = SubResource( 1 )
+material/0 = null
+script = ExtResource( 2 )
+
+[node name="Tween" type="Tween" parent="MeshInstance"]
+
+[node name="Camera" type="Camera" parent="."]
+transform = Transform( -3.03864e-08, 0.173494, 0.984835, 3.14221e-08, 0.984835, -0.173494, -1, 2.56738e-08, -3.53772e-08, 27.9277, 10.8124, -0.78159 )
+script = ExtResource( 5 )
+
+[node name="LeftPosition" type="Position3D" parent="." groups=["LeftPos"]]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -16.1776, 0, 0 )
+
+[node name="RightPosition" type="Position3D" parent="." groups=["RightPos"]]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 13.2055, 0, 0 )
+
+[node name="Control" type="Control" parent="."]
+margin_right = 196.0
+margin_bottom = 121.0
+script = ExtResource( 3 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="DateTimeLabel" type="RichTextLabel" parent="Control"]
+margin_left = 25.0
+margin_top = 27.0
+margin_right = 183.0
+margin_bottom = 67.0
+text = "Date/Time: "
+
+[node name="DateTimeValue" type="RichTextLabel" parent="Control"]
+margin_left = 25.0
+margin_top = 42.0
+margin_right = 183.0
+margin_bottom = 82.0
+text = "Date/Time: "
+
+[node name="HSlider" type="HSlider" parent="Control" groups=["hslider"]]
+margin_left = 5.0
+margin_top = 81.0
+margin_right = 487.0
+margin_bottom = 97.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource( 3 )
+script = ExtResource( 4 )
+
+[node name="DirectionalLight" type="DirectionalLight" parent="WorldEnvironment"]
+shadow_enabled = true
+
+[node name="MeshInstance2" type="MeshInstance" parent="."]
+transform = Transform( 49.6595, 0, 0, 0, 1, 0, 0, 0, 49.6595, 0, -0.959766, 0 )
+mesh = SubResource( 4 )
+material/0 = null
+
+[connection signal="value_changed" from="Control/HSlider" to="WorldEnvironment" method="_on_HSlider_value_changed"]
